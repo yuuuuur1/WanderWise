@@ -46,6 +46,7 @@
   width: var(--max-width);
 }
 
+
 .card {
   padding: 1rem 1.2rem;
   border-radius: var(--border-radius);
