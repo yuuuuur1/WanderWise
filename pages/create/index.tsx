@@ -38,23 +38,32 @@ const CreateArticle = () => {
       }
 
       // 記事データを保存
-      const { error } = await supabase.from("articles").insert({
-        title,
-        content,
-        location, // 新しく追加された場所データ
-        date,
-        image_url: imageUrl,
-      });
+      const { data, error } = await supabase
+        .from("todo")
+        .insert({
+          title,
+          content,
+          location,
+          date,
+          image_url: imageUrl,
+        })
+        .select("id"); // IDを取得
 
       if (error) throw error;
 
-      // 成功時には記事一覧ページにリダイレクト
-      router.push("/article");
+      if (data && data.length > 0) {
+        const newArticleId = data[0].id;
+        router.push(`/article/${newArticleId}`); // 記事詳細ページにリダイレクト
+      }
     } catch (error) {
       console.error("Error creating article:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBack = () => {
+    router.push("/"); // 一覧ページにリダイレクト
   };
 
   return (
@@ -66,7 +75,7 @@ const CreateArticle = () => {
             htmlFor="title"
             className="block text-sm font-medium text-gray-700"
           >
-            場所の名前
+            Title
           </label>
           <input
             type="text"
@@ -82,7 +91,7 @@ const CreateArticle = () => {
             htmlFor="location"
             className="block text-sm font-medium text-gray-700"
           >
-            場所
+            location
           </label>
           <input
             type="text"
@@ -98,7 +107,7 @@ const CreateArticle = () => {
             htmlFor="content"
             className="block text-sm font-medium text-gray-700"
           >
-            詳細
+            content
           </label>
           <textarea
             id="content"
@@ -114,7 +123,7 @@ const CreateArticle = () => {
             htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            日付
+            date
           </label>
           <input
             type="date"
@@ -130,7 +139,7 @@ const CreateArticle = () => {
             htmlFor="image"
             className="block text-sm font-medium text-gray-700"
           >
-            画像
+            image
           </label>
           <input
             type="file"
@@ -140,13 +149,22 @@ const CreateArticle = () => {
             className="mt-1 block w-full text-sm text-gray-500"
           />
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          {loading ? "保存中..." : "記事を作成"}
-        </button>
+        <div className="flex justify-between">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            {loading ? "Saving..." : "Create"}
+          </button>
+          <button
+            type="button"
+            onClick={handleBack}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+          >
+            cancel
+          </button>
+        </div>
       </form>
     </div>
   );
