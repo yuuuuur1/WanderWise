@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/utils/supabase"; // Supabaseの設定ファイルをインポート
+import { uploadStorage } from "@/utils/storage";
 
 const CreateArticle = () => {
   const router = useRouter();
@@ -13,10 +14,16 @@ const CreateArticle = () => {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
+  const [path, setPathName] = useState<string | undefined>();
+  const handleUploadStorage = async (folder: any | null) => {
+    if (!folder || !folder.length) return;
+    const { path } = await uploadStorage({
+      folder,
+      bucketName: "articles",
+    });
+    const { data } = supabase.storage.from("articles").getPublicUrl(path);
+    if (path) setPathName(data.publicUrl);
+    console.log(path);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -145,7 +152,11 @@ const CreateArticle = () => {
             type="file"
             id="image"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={(e) => {
+              const fileList = e.target?.files;
+              console.log(fileList);
+              handleUploadStorage(fileList);
+            }}
             className="mt-1 block w-full text-sm text-gray-500"
           />
         </div>
