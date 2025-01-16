@@ -31,12 +31,12 @@ const ArticleDetail = () => {
   const handleDelete = async () => {
     if (!id || typeof id !== "string") return;
 
-    const confirmDelete = window.confirm("この記事を本当に削除しますか？");
+    const confirmDelete = window.confirm("本当に削除しますか？");
     if (!confirmDelete) return;
 
     try {
       await deleteArticle(Number(id)); // 削除関数を実行
-      alert("記事が削除されました。");
+      alert("削除されました。");
       router.push("/"); // ホームページにリダイレクト
     } catch (error) {
       console.error("削除エラー:", error);
@@ -50,7 +50,7 @@ const ArticleDetail = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-  if (!article) return <p>記事が見つかりませんでした。</p>;
+  if (!article) return <p>Not found</p>;
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded">

@@ -1,4 +1,4 @@
-// Todo の基本インターフェース
+  //Todo: リスト表示や軽量な操作（基本タスク管理）に使用。
 export interface Todo {
     id: number; // 一意のID
     title: string; // タイトル
@@ -7,6 +7,8 @@ export interface Todo {
   }
   
   // Todo を拡張して Article を定義
+  //Article: 記事の詳細ページや編集ページなど、フルデータが必要な場面で使用。
+  //
   export interface Article extends Todo {
     content: string; // 詳細
     image_url: string | null; // 画像URL
