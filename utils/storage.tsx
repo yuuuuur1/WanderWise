@@ -15,7 +15,7 @@ export const uploadStorage = async ({
   bucketName,
 }: UploadStorage): Promise<UploadPathname> => {
   const file = folder[0]; // 1ファイルアップロード
-  const pathName = `images/${uuidv4()}`; // パス名の設定
+  const pathName = `images/${file.name}`; // パス名の設定
   const { data, error } = await supabase.storage
     .from(bucketName)
     .upload(pathName, file, {

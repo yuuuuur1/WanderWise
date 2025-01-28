@@ -87,3 +87,11 @@ export const updateArticle = async (
     throw error;
   }
 };
+
+export const signOutUser = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("Error during sign out:", error.message);
+    throw error;
+  }
+};

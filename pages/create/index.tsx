@@ -13,8 +13,9 @@ const CreateArticle = () => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const [file, setFile] = useState<File | null>(null);
   const [path, setPathName] = useState<string | undefined>();
+
   const handleUploadStorage = async (folder: any | null) => {
     if (!folder || !folder.length) return;
     const { path } = await uploadStorage({
@@ -31,18 +32,12 @@ const CreateArticle = () => {
     setLoading(true);
 
     try {
-      let imageUrl = null;
+      let filePath = null;
 
       // 画像アップロード
-      if (image) {
-        const { data, error } = await supabase.storage
-          .from("articles") // 作成したストレージバケット名
-          .upload(`images/${Date.now()}_${image.name}`, image);
-
-        if (error) throw error;
-
-        imageUrl = data?.path;
-      }
+      if (file[0]) {
+        filePath = `images/${file[0].name}`;
+      } // 画像の保存先のpathを指定
 
       // 記事データを保存
       const { data, error } = await supabase
@@ -52,11 +47,13 @@ const CreateArticle = () => {
           content,
           location,
           date,
-          image_url: imageUrl,
+          image_url: filePath,
         })
         .select("id"); // IDを取得
 
       if (error) throw error;
+
+      handleUploadStorage(file);
 
       if (data && data.length > 0) {
         const newArticleId = data[0].id;
@@ -154,8 +151,8 @@ const CreateArticle = () => {
             accept="image/*"
             onChange={(e) => {
               const fileList = e.target?.files;
-              console.log(fileList);
-              handleUploadStorage(fileList);
+              console.log(fileList[0].name);
+              setFile(fileList);
             }}
             className="mt-1 block w-full text-sm text-gray-500"
           />

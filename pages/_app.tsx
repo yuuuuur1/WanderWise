@@ -1,6 +1,16 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import "@/styles/globals.css";
+import Header from "@/components/Header"; // ヘッダーをインポート
+import { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <div>
+      {/* ヘッダーを全体に適用 */}
+      <Header />
+      <main className="p-4">
+        {/* 各ページのコンポーネント */}
+        <Component {...pageProps} />
+      </main>
+    </div>
+  );
 }

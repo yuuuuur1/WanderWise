@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getArticle, updateArticle } from "@/utils/supabasweFunctions";
+import { supabase } from "@/utils/supabase";
 import { Article } from "@/utils/interface";
 
 const EditArticle = () => {
@@ -10,11 +11,12 @@ const EditArticle = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
+  const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
+  const [image, setImage] = useState<File | null>(null);
 
   // 記事データを取得
   useEffect(() => {
@@ -29,6 +31,11 @@ const EditArticle = () => {
           setContent(data.content);
           setLocation(data.location);
           setDate(data.date);
+          const { data: urlData } = supabase.storage
+            .from("articles")
+            .getPublicUrl(data?.image_url);
+          console.log(urlData);
+          setFile(urlData.publicUrl);
         }
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -47,13 +54,44 @@ const EditArticle = () => {
 
     setSaving(true);
     try {
-      await updateArticle(Number(id), { title, content, location, date });
+      let imageUrl = article?.image_url || null;
+
+      // 新しい画像が選択された場合
+      if (file) {
+        console.log(file.name);
+        const filePath = `images/${Date.now()}_${file.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from("articles")
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        imageUrl = filePath;
+      }
+
+      // 記事データを更新
+      const updatedData = {
+        title,
+        content,
+        location,
+        date,
+        image_url: imageUrl,
+      };
+
+      await updateArticle(Number(id), updatedData);
       alert("記事を更新しました！");
       router.push(`/article/${id}`); // 詳細ページへリダイレクト
     } catch (error) {
       console.error("Error updating article:", error);
+      alert("記事の更新に失敗しました。");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
     }
   };
 
@@ -85,7 +123,7 @@ const EditArticle = () => {
             htmlFor="location"
             className="block text-sm font-medium text-gray-700"
           >
-            location
+            Location
           </label>
           <input
             type="text"
@@ -101,7 +139,7 @@ const EditArticle = () => {
             htmlFor="content"
             className="block text-sm font-medium text-gray-700"
           >
-            content
+            Content
           </label>
           <textarea
             id="content"
@@ -117,7 +155,7 @@ const EditArticle = () => {
             htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            date
+            Date
           </label>
           <input
             type="date"
@@ -127,6 +165,28 @@ const EditArticle = () => {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="mt-1 block w-full text-sm text-gray-500"
+          />
+          {article.image_url && (
+            <img
+              src={file}
+              alt={article.title}
+              className="mt-4 w-full max-h-64 object-cover rounded"
+            />
+          )}
         </div>
         <div className="flex justify-between">
           <button
@@ -141,7 +201,7 @@ const EditArticle = () => {
             onClick={() => router.push(`/article/${id}`)}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
-            cancel
+            Cancel
           </button>
         </div>
       </form>
