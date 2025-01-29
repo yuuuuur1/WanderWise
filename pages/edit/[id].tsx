@@ -16,7 +16,7 @@ const EditArticle = () => {
   const [content, setContent] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<string | null>(null); // 型をstring | nullに変更
 
   // 記事データを取得
   useEffect(() => {
@@ -31,11 +31,15 @@ const EditArticle = () => {
           setContent(data.content);
           setLocation(data.location);
           setDate(data.date);
-          const { data: urlData } = supabase.storage
-            .from("articles")
-            .getPublicUrl(data?.image_url);
-          console.log(urlData);
-          setFile(urlData.publicUrl);
+
+          // image_urlがnullでない場合のみgetPublicUrlを呼び出す
+          if (data.image_url) {
+            const { data: urlData } = supabase.storage
+              .from("articles")
+              .getPublicUrl(data?.image_url);
+            console.log(urlData);
+            setImage(urlData.publicUrl); // 画像のURLをimageにセット
+          }
         }
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -91,7 +95,15 @@ const EditArticle = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const newFile = e.target.files[0];
+      setFile(newFile);
+
+      // FileReaderを使って画像のURLを生成
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string); // 生成したURLをimageにセット
+      };
+      reader.readAsDataURL(newFile); // 画像ファイルを読み込む
     }
   };
 
@@ -180,9 +192,10 @@ const EditArticle = () => {
             onChange={handleImageChange}
             className="mt-1 block w-full text-sm text-gray-500"
           />
-          {article.image_url && (
+          {image && ( // imageを使って表示
             <img
-              src={file}
+              src={image} // 修正: srcにimageを設定
+              // src={file}
               alt={article.title}
               className="mt-4 w-full max-h-64 object-cover rounded"
             />

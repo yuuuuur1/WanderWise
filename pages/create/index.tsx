@@ -13,7 +13,7 @@ const CreateArticle = () => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<FileList | null>(null); // FileListに変更
   const [path, setPathName] = useState<string | undefined>();
 
   const handleUploadStorage = async (folder: any | null) => {
@@ -35,9 +35,9 @@ const CreateArticle = () => {
       let filePath = null;
 
       // 画像アップロード
-      if (file[0]) {
+      if (file && file.length > 0) {
         filePath = `images/${file[0].name}`;
-      } // 画像の保存先のpathを指定
+      }
 
       // 記事データを保存
       const { data, error } = await supabase
@@ -151,7 +151,6 @@ const CreateArticle = () => {
             accept="image/*"
             onChange={(e) => {
               const fileList = e.target?.files;
-              console.log(fileList[0].name);
               setFile(fileList);
             }}
             className="mt-1 block w-full text-sm text-gray-500"
