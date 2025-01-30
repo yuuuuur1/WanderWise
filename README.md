@@ -1,41 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wander-Wise
 
-## Getting Started
+## 使用技術一覧
+- Next.js
+- React
+- TypeScript
+- Supabase
+- Tailwind CSS
 
-First, run the development server:
+## 概要
+**Wander-Wise** は、訪れたスポットを記録・管理できるシンプルなアプリです。子供とお出かけした場所の記録を残したいと思い開発しました。各スポットの詳細情報を保存し、過去に訪れた場所を簡単に振り返ることができます。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## アプリを作ったきっかけ
+子供とのお出かけ先を記録し、次回のお出かけ計画に活かせるアプリがあれば便利だと考えました。訪れた場所の情報は、写真や詳細なメモとともに保存できるため、思い出を整理しやすくなります。また、お気に入りのスポットをリスト化することで、リピート訪問もしやすくなります。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## アプリ機能説明
+- **スポット登録**: 訪れた場所の名前・写真・場所・日付・メモを登録できます。
+- **スポット一覧表示**: 記録したスポットを一覧で表示し、過去のお出かけ履歴を管理できます。
+- **詳細ページ**: それぞれのスポットの詳細情報を表示し、編集・削除が可能です。
+- **検索機能**: スポット名やメモの内容で検索できます。
+- **お気に入り機能**: お気に入り登録したスポットを別ページで一覧表示できます。
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 今後の実装予定
+- **画像を複数登録できるように調整**（スポットごとに複数の写真をアップロード可能に）
+- **気になるリストの実装**（行きたい場所をリスト化し、訪れたら完了マークを付けられる）
+- **マップ連携機能**（訪れた場所を地図上で確認）
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## アプリ表示イメージ
+スクリーンショットをここに追加予定
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## アプリURL[
+https://wander-wise-rose.vercel.app/
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## テストアカウント
+- **ID:** testuser@example.com
+- **PASS:** password
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# WanderWise
