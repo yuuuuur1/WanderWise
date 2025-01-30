@@ -9,18 +9,22 @@ const CreateArticle = () => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(""); // 場所を管理するstate
   const [date, setDate] = useState("");
-  const [file, setFile] = useState<FileList | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // 画像プレビュー用
+  const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<FileList | null>(null); // FileListに変更
+  const [path, setPathName] = useState<string | undefined>();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (fileList && fileList[0]) {
-      setFile(fileList);
-      setPreviewUrl(URL.createObjectURL(fileList[0])); // プレビュー用のURLをセット
-    }
+  const handleUploadStorage = async (folder: any | null) => {
+    if (!folder || !folder.length) return;
+    const { path } = await uploadStorage({
+      folder,
+      bucketName: "articles",
+    });
+    const { data } = supabase.storage.from("articles").getPublicUrl(path);
+    if (path) setPathName(data.publicUrl);
+    console.log(path);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,6 +33,8 @@ const CreateArticle = () => {
 
     try {
       let filePath = null;
+
+      // 画像アップロード
       if (file && file.length > 0) {
         filePath = `images/${file[0].name}`;
       }
@@ -43,19 +49,25 @@ const CreateArticle = () => {
           date,
           image_url: filePath,
         })
-        .select("id");
+        .select("id"); // IDを取得
 
       if (error) throw error;
 
+      handleUploadStorage(file);
+
       if (data && data.length > 0) {
         const newArticleId = data[0].id;
-        router.push(`/article/${newArticleId}`);
+        router.push(`/article/${newArticleId}`); // 記事詳細ページにリダイレクト
       }
     } catch (error) {
       console.error("Error creating article:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBack = () => {
+    router.push("/"); // 一覧ページにリダイレクト
   };
 
   return (
@@ -78,13 +90,12 @@ const CreateArticle = () => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="location"
             className="block text-sm font-medium text-gray-700"
           >
-            Location
+            location
           </label>
           <input
             type="text"
@@ -95,13 +106,12 @@ const CreateArticle = () => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="content"
             className="block text-sm font-medium text-gray-700"
           >
-            Content
+            content
           </label>
           <textarea
             id="content"
@@ -112,51 +122,40 @@ const CreateArticle = () => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            Date
+            date
           </label>
           <input
             type="date"
             id="date"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) => setDate(e.target.value)} // stringのままセット
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required
           />
         </div>
-
         <div className="mb-4">
           <label
             htmlFor="image"
             className="block text-sm font-medium text-gray-700"
           >
-            Image
+            image
           </label>
           <input
             type="file"
             id="image"
             accept="image/*"
-            onChange={handleFileChange}
+            onChange={(e) => {
+              const fileList = e.target?.files;
+              setFile(fileList);
+            }}
             className="mt-1 block w-full text-sm text-gray-500"
           />
-          {/* プレビュー画像の表示 */}
-          {previewUrl && (
-            <div className="mt-4">
-              <p className="text-gray-600 text-sm">Preview:</p>
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="w-full max-h-64 object-cover rounded"
-              />
-            </div>
-          )}
         </div>
-
         <div className="flex justify-between">
           <button
             type="submit"
@@ -167,10 +166,10 @@ const CreateArticle = () => {
           </button>
           <button
             type="button"
-            onClick={() => router.push("/")}
+            onClick={handleBack}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
-            Cancel
+            cancel
           </button>
         </div>
       </form>
