@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/utils/supabase"; // Supabaseクライアントをインポート
 import { useRouter } from "next/router";
+import Link from "next/link"; // リンク用
 
 const SignIn = () => {
   const router = useRouter();
@@ -69,11 +70,17 @@ const SignIn = () => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
         >
           {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>
+      <p className="mt-4 text-sm text-center text-gray-600">
+        Don't have an account?{" "}
+        <Link href="/signup" className="text-blue-500 hover:underline">
+          Sign up
+        </Link>
+      </p>
     </div>
   );
 };
