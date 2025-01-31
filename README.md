@@ -39,6 +39,9 @@
 ### 📍 スポット詳細画面
 <img width="1512" alt="Image" src="https://github.com/user-attachments/assets/9a2e5586-ee9a-4dff-b145-7a92562758bb" />
 
+### 📝 編集画面
+<img width="1512" alt="Image" src="https://github.com/user-attachments/assets/f8fa70be-31e8-49ad-b46e-2a900c8697ae" />
+
 ## 🔗 アプリURL
 https://wander-wise-rose.vercel.app/
 
