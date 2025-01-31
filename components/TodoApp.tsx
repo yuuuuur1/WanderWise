@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import TodoList from "./TodoList";
 import { getAllTodos } from "@/utils/supabasweFunctions";
 import Link from "next/link"; // Linkをインポート
+import { Todo } from "@/utils/interface";
 
 const TodoApp = () => {
-  const [todos, setTodos] = useState<any>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     const getTodos = async () => {

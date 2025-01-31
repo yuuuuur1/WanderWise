@@ -11,7 +11,6 @@ const CreateArticle = () => {
   const [content, setContent] = useState("");
   const [location, setLocation] = useState(""); // 場所を管理するstate
   const [date, setDate] = useState("");
-  const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<FileList | null>(null); // FileListに変更
   const [path, setPathName] = useState<string | undefined>();

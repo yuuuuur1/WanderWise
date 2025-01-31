@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { getArticle, updateArticle } from "@/utils/supabasweFunctions";
 import { supabase } from "@/utils/supabase";
 import { Article } from "@/utils/interface";
+import Image from "next/image";
 
 const EditArticle = () => {
   const router = useRouter();
@@ -193,7 +194,7 @@ const EditArticle = () => {
             className="mt-1 block w-full text-sm text-gray-500"
           />
           {image && ( // imageを使って表示
-            <img
+            <Image
               src={image} // 修正: srcにimageを設定
               // src={file}
               alt={article.title}

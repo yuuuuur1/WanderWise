@@ -5,6 +5,7 @@ import { supabase } from "@/utils/supabase"; // Supabaseクライアント
 import { getArticle, deleteArticle } from "@/utils/supabasweFunctions"; // 必要な関数
 import { Article } from "@/utils/interface";
 import { FaTrash, FaEdit } from "react-icons/fa";
+import Image from "next/image";
 
 const ArticleDetail = () => {
   const router = useRouter();
@@ -67,7 +68,7 @@ const ArticleDetail = () => {
 
       {/* 画像の表示 */}
       {imageUrl && (
-        <img
+        <Image
           src={imageUrl}
           alt={article.title}
           className="w-full h-auto rounded mb-4"

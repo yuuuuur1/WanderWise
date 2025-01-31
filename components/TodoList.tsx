@@ -4,7 +4,7 @@ import React from "react";
 
 type Props = {
   todos: Todo[];
-  setTodos: React.Dispatch<any>;
+  setTodos: React.Dispatch<Todo[]>;
 };
 
 const TodoList = (props: Props) => {

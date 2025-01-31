@@ -1,6 +1,4 @@
-import { title } from "process"
 import {supabase} from "../utils/supabase"
-import { Todo } from "./interface"
 import { Article } from "./interface";
 
 export const getAllTodos = async () => {
