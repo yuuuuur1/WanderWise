@@ -31,13 +31,16 @@
 
 ## 📱 アプリ表示イメージ
 ### 🏠 ホーム画面
-![ホーム画面](assets/home.png)
+<img width="1512" alt="Image" src="https://github.com/user-attachments/assets/b5ecb484-40a5-440c-9ddf-9800d39d21a8" />
 
 ### 📝 新規登録画面
-![新規投稿画面](assets/create.png)
+<img width="1512" alt="Image" src="https://github.com/user-attachments/assets/3d39ca2a-70c8-4336-8685-fbc160d8a224" />
 
 ### 📍 スポット詳細画面
-![詳細ページ](assets/detail.png)
+<img width="1512" alt="Image" src="https://github.com/user-attachments/assets/9a2e5586-ee9a-4dff-b145-7a92562758bb" />
+
+### 📝 編集画面
+<img width="1512" alt="Image" src="https://github.com/user-attachments/assets/f8fa70be-31e8-49ad-b46e-2a900c8697ae" />
 
 ## 🔗 アプリURL
 https://wander-wise-rose.vercel.app/
